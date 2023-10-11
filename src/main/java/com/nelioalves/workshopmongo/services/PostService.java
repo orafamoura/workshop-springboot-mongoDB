@@ -1,5 +1,6 @@
 package com.nelioalves.workshopmongo.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import com.nelioalves.workshopmongo.services.exception.ObjectNotFoundException;
 @Service
 public class PostService {
 
-	
 	@Autowired //mecanismo de injecao de dependencia automatica
 	private PostRepository repo;
 	
@@ -20,5 +20,10 @@ public class PostService {
 		Optional<Post> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
+	
+	public List<Post> findByTitle(String text){
+		return repo.findByTitleContaining(text);
+	}
+	
 	
 }
