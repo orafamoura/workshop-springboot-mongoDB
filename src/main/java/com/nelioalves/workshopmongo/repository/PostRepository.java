@@ -1,5 +1,6 @@
 package com.nelioalves.workshopmongo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -16,4 +17,10 @@ public interface PostRepository extends MongoRepository<Post, String>{
 	List<Post> searchTitle(String text);
 	
 	List<Post> findByTitleContainingIgnoreCase(String text); //a parte de ContainingIgnoreCase sao do metodo query methods, onde palavras chaves sao usadas para encontrar algo etc.
+
+	@Query("{ $and: [ { date: {$gte: ?1} }, { date: { $lte: ?2} } , { $or: [ { 'title': { $regex: ?0, $options: 'i' } }, { 'body': { $regex: ?0, $options: 'i' } }, { 'comments.text': { $regex: ?0, $options: 'i' } } ] } ] }") // na documentacao do mongo encontramos esses operadores, gte, lte etc, qte fala date tem que ser maior ou igual a minDate e lte menor ou igual
+	List<Post> fullSearch(String text, Date minDate, Date maxDate);
+
 }
+
+
